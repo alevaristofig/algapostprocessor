@@ -18,8 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class RabbitMQConfig {
 
 	private static final String TEXT_PROCESSOR = "text-processor-service.post-processing.v1";
-	public static final String FANOUT_TEXT_PROCESSOR = "text-processor-service.post-processing.v1"+".e";
-	public static final String QUEUE_TEXT_PROCESSOR = "text-processor-service.post-processing.v1"+".q";
+	public static final String FANOUT_TEXT_PROCESSOR = TEXT_PROCESSOR +".e";
+	public static final String QUEUE_TEXT_PROCESSOR = TEXT_PROCESSOR +".q";
+	public static final String QUEUE_TEXT_PROCESSOR_POST = "post-service.post-processing-result.v1.q";
 	
 	@Bean
 	public Jackson2JsonMessageConverter jackson2JsonMessageConverter(ObjectMapper mapper) {
@@ -42,7 +43,17 @@ public class RabbitMQConfig {
 	}
 	
 	@Bean
+	public Queue queueProcessorPost() {
+		return QueueBuilder.durable(QUEUE_TEXT_PROCESSOR_POST).build();
+	}
+	
+	@Bean
 	public Binding bindingText() {
 		return BindingBuilder.bind(queuePost()).to(exchange());
+	}
+	
+	@Bean
+	public Binding bindingTextPost() {
+		return BindingBuilder.bind(queueProcessorPost()).to(exchange());
 	}
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class PostListener {
 
-	private String postId;
-	private String postBody;
+	private String title;
+	private String body;
+	private String author;
 }

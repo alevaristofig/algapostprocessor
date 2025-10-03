@@ -38,18 +38,8 @@ public class RabbitMQConfig {
 	}
 	
 	@Bean
-	public Queue queuePost() {
-		return QueueBuilder.durable(QUEUE_TEXT_PROCESSOR).build();
-	}
-	
-	@Bean
 	public Queue queueProcessorPost() {
 		return QueueBuilder.durable(QUEUE_TEXT_PROCESSOR_POST).build();
-	}
-	
-	@Bean
-	public Binding bindingText() {
-		return BindingBuilder.bind(queuePost()).to(exchange());
 	}
 	
 	@Bean

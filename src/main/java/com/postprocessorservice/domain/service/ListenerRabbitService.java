@@ -16,12 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class ListenerRabbitService {
 
-	//@Autowired
-	//private 
+	@Autowired
+	private PostProcessorService service;
 	
 	@RabbitListener(queues = RabbitMQConfig.QUEUE_TEXT_PROCESSOR)
 	public void listenerPost(PostListener post, @Header(value = "postId") String postId) {
 		
-		System.out.println(postId+","+post.toString());
+		//System.out.println(postId+","+post.toString());
+		
+		service.processarPost(post,postId);
 	}
 }

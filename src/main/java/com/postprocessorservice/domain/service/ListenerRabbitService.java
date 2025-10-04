@@ -1,11 +1,15 @@
 package com.postprocessorservice.domain.service;
 
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Headers;
 
 import com.postprocessorservice.api.model.PostListener;
 import com.postprocessorservice.infrastruct.rabbitmq.RabbitMQConfig;
@@ -20,10 +24,10 @@ public class ListenerRabbitService {
 	private PostProcessorService service;
 	
 	@RabbitListener(queues = RabbitMQConfig.QUEUE_TEXT_PROCESSOR)
-	public void listenerPost(PostListener post, @Header(value = "postId") String postId) {
+	public void listenerPost(PostListener post, @Headers Map<String, Object> headers) {
 		
-		//System.out.println(postId+","+post.toString());
+		Object postId = headers.get("postId");		
 		
-		service.processarPost(post,postId);
+		service.processarPost(post,postId.toString());
 	}
 }

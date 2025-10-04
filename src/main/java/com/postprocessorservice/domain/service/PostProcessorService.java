@@ -1,5 +1,6 @@
 package com.postprocessorservice.domain.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.postprocessorservice.api.model.PostListener;
@@ -7,6 +8,9 @@ import com.postprocessorservice.api.model.PostOutuptListener;
 
 @Service
 public class PostProcessorService {
+	
+	@Autowired
+	private NotificacaoRabbitService notificacaoRabbitService;
 
 	public void processarPost(PostListener post, String postId) {
 		String[] words = post.getBody().trim().split("\\s+");
@@ -18,6 +22,7 @@ public class PostProcessorService {
 		postOutput.setWordCount(words.length);
 		postOutput.setCalculatedValue(calculatedValue);
 		
-		System.out.println(words.length+","+calculatedValue);
+		notificacaoRabbitService.notificar(postOutput);
+				
 	}
 }
